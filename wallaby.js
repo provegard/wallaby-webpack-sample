@@ -20,6 +20,8 @@ module.exports = function (wallaby) {
     setup: function () {
       window.expect = chai.expect;
       window.__moduleBundler.loadTests();
-    }
+    },
+
+    trace: true
   };
 };
