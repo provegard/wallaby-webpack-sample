@@ -1,6 +1,3 @@
-const wallabyWebpack = require('wallaby-webpack');
-const webpackPostprocessor = wallabyWebpack({});
-
 module.exports = function (wallaby) {
 
   return {
@@ -14,11 +11,11 @@ module.exports = function (wallaby) {
       { pattern: 'test/**/*Spec.js', load: false }
     ],
 
-    compilers: {
-      '**/*.js': wallaby.compilers.babel()
-    },
+    // compilers: {
+    //   '**/*.js': wallaby.compilers.babel()
+    // },
 
-    postprocessor: webpackPostprocessor,
+    postprocessor: wallaby.postprocessors.webpack({}),
 
     setup: function () {
       window.expect = chai.expect;
