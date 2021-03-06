@@ -1,5 +1,4 @@
-const wallabyWebpack = require('wallaby-webpack');
-const webpackPostprocessor = wallabyWebpack({});
+const { VueLoaderPlugin } = require("vue-loader")
 
 module.exports = function (wallaby) {
 
@@ -7,22 +6,38 @@ module.exports = function (wallaby) {
     files: [
       // loading chai globally
       { pattern: 'node_modules/chai/chai.js', instrument: false },
-      { pattern: 'src/**/*.js', load: false }
+      { pattern: 'src/**/*.js', load: false },
+      { pattern: 'src/**/*.vue', load: false }
     ],
 
     tests: [
       { pattern: 'test/**/*Spec.js', load: false }
     ],
 
-    compilers: {
-      '**/*.js': wallaby.compilers.babel()
-    },
+    // compilers: {
+    //   '**/*.js': wallaby.compilers.babel()
+    // },
 
-    postprocessor: webpackPostprocessor,
+    postprocessor: wallaby.postprocessors.webpack({
+      resolve: {
+        extensions: [".js", ".vue"]
+      },
+      plugins: [new VueLoaderPlugin()],
+      module: {
+        rules: [
+          {
+            test: /\.vue$/,
+            loader: "vue-loader"
+          }
+        ]
+      }
+    }),
 
     setup: function () {
       window.expect = chai.expect;
       window.__moduleBundler.loadTests();
-    }
+    },
+
+    trace: true,
   };
 };
